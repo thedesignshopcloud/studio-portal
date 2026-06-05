@@ -3,19 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Design Shop Portal</title>
+<title>The Design Shop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #F7F4EF;
     --parchment: #EDE8DF;
-    --sand: #D4C9B5;
     --ink: #1C1917;
     --ink-mid: #4A4540;
     --ink-light: #8A8078;
     --accent: #C4703A;
-    --accent-light: #F0E0D0;
     --green: #3A6B4A;
     --green-light: #D8EBE0;
     --amber: #9B7A1A;
@@ -25,517 +23,138 @@
     --border: rgba(28,25,23,0.12);
     --border-strong: rgba(28,25,23,0.25);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; font-size: 14px; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    font-size: 14px;
-  }
-
-  /* ── Auth screen ── */
-  #auth-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--ink);
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    flex-direction: column;
-    gap: 0;
-  }
+  #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--ink); position: fixed; inset: 0; z-index: 100; flex-direction: column; }
   #auth-screen.hidden { display: none; }
-
-  .auth-box {
-    width: 340px;
-    padding: 48px 40px 40px;
-    background: var(--cream);
-  }
-  .auth-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    margin-bottom: 6px;
-    color: var(--ink);
-  }
-  .auth-tagline {
-    font-size: 12px;
-    color: var(--ink-light);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 36px;
-  }
-  .auth-label {
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-mid);
-    margin-bottom: 6px;
-    display: block;
-  }
-  .auth-input {
-    width: 100%;
-    border: 0.5px solid var(--border-strong);
-    background: white;
-    padding: 11px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    margin-bottom: 20px;
-  }
+  .auth-box { width: 340px; padding: 48px 40px 40px; background: var(--cream); }
+  .auth-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 4px; color: var(--ink); }
+  .auth-tagline { font-size: 11px; color: var(--ink-light); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 36px; }
+  .auth-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 6px; display: block; }
+  .auth-input { width: 100%; border: 0.5px solid var(--border-strong); background: white; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); outline: none; margin-bottom: 20px; }
   .auth-input:focus { border-color: var(--ink); }
-  .auth-btn {
-    width: 100%;
-    background: var(--ink);
-    color: var(--cream);
-    border: none;
-    padding: 13px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
+  .auth-btn { width: 100%; background: var(--ink); color: var(--cream); border: none; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
   .auth-btn:hover { background: var(--ink-mid); }
-  .auth-error {
-    font-size: 12px;
-    color: #b33;
-    margin-top: 12px;
-    display: none;
-  }
-  .auth-roles {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 0.5px solid var(--border);
-    font-size: 11px;
-    color: var(--ink-light);
-    line-height: 1.8;
-  }
+  .auth-error { font-size: 12px; color: #b33; margin-top: 12px; display: none; }
 
-  /* ── App layout ── */
   #app { display: none; }
   #app.visible { display: block; }
 
-  header {
-    background: var(--ink);
-    color: var(--cream);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-  .header-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 0.14em;
-  }
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  .role-badge {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border: 0.5px solid rgba(247,244,239,0.3);
-    color: rgba(247,244,239,0.7);
-  }
-  .logout-btn {
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    background: none;
-    border: none;
-    color: rgba(247,244,239,0.5);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-  }
+  header { background: var(--ink); color: var(--cream); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; }
+  .header-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; letter-spacing: 0.14em; }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .role-badge { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border: 0.5px solid rgba(247,244,239,0.3); color: rgba(247,244,239,0.7); }
+  .logout-btn { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: none; color: rgba(247,244,239,0.5); cursor: pointer; font-family: 'DM Sans', sans-serif; }
   .logout-btn:hover { color: var(--cream); }
 
-  /* ── Toolbar ── */
-  .toolbar {
-    background: white;
-    border-bottom: 0.5px solid var(--border);
-    padding: 12px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+  .saving-indicator { font-size: 11px; color: rgba(247,244,239,0.5); display: none; align-items: center; gap: 6px; }
+  .saving-indicator.show { display: flex; }
+  .saving-dot { width: 6px; height: 6px; border-radius: 50%; background: #6BCB8B; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .toolbar { background: white; border-bottom: 0.5px solid var(--border); padding: 12px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .toolbar-section { display: flex; gap: 8px; align-items: center; }
-  .filter-btn {
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    padding: 6px 14px;
-    border: 0.5px solid var(--border-strong);
-    background: transparent;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--ink-mid);
-    transition: all 0.15s;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--ink);
-    color: var(--cream);
-    border-color: var(--ink);
-  }
+  .filter-btn { font-size: 12px; letter-spacing: 0.04em; padding: 6px 14px; border: 0.5px solid var(--border-strong); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--ink-mid); transition: all 0.15s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .toolbar-sep { width: 0.5px; height: 20px; background: var(--border); }
-  .search-input {
-    border: 0.5px solid var(--border-strong);
-    padding: 6px 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    background: white;
-    outline: none;
-    width: 200px;
-  }
+  .search-input { border: 0.5px solid var(--border-strong); padding: 6px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink); background: white; outline: none; width: 200px; }
   .search-input:focus { border-color: var(--ink); }
-  .add-btn {
-    margin-left: auto;
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 7px 18px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
+  .add-btn { margin-left: auto; background: var(--accent); color: white; border: none; padding: 7px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
   .add-btn:hover { background: #a85e2e; }
 
-  /* ── Main grid ── */
   main { padding: 28px 32px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 
-  /* ── Project card ── */
-  .card {
-    background: white;
-    border: 0.5px solid var(--border);
-    overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-  }
+  .loading-screen { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
+  .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--ink-mid); }
+  .loading-sub { font-size: 13px; color: var(--ink-light); margin-top: 8px; }
+
+  .card { background: white; border: 0.5px solid var(--border); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; cursor: pointer; }
   .card:hover { border-color: var(--border-strong); box-shadow: 0 4px 20px rgba(28,25,23,0.06); }
-
-  .card-top {
-    padding: 20px 20px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .card-category {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 6px;
-  }
-  .card-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1.2;
-    color: var(--ink);
-    margin-bottom: 4px;
-  }
-  .card-client {
-    font-size: 12px;
-    color: var(--ink-light);
-    margin-bottom: 16px;
-  }
-
-  .stage-badge {
-    font-size: 10px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .stage-schematic    { background: #F0E8FF; color: #4A2D9A; }
-  .stage-dd           { background: var(--amber-light); color: var(--amber); }
-  .stage-tender       { background: var(--blue-light); color: var(--blue); }
-  .stage-execution    { background: #FDE8D0; color: #8B4A1A; }
-  .stage-handover     { background: var(--green-light); color: var(--green); }
-  .stage-completed    { background: var(--parchment); color: var(--ink-mid); }
-
-  /* Deliverables grid */
-  .deliverables {
-    padding: 14px 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-  .del-item {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    color: var(--ink-mid);
-  }
-  .del-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .card-top { padding: 20px 20px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-category { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px; }
+  .card-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 4px; }
+  .card-client { font-size: 12px; color: var(--ink-light); margin-bottom: 16px; }
+  .stage-badge { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; padding: 4px 10px; font-weight: 500; white-space: nowrap; }
+  .stage-schematic { background: #F0E8FF; color: #4A2D9A; }
+  .stage-dd { background: var(--amber-light); color: var(--amber); }
+  .stage-tender { background: var(--blue-light); color: var(--blue); }
+  .stage-execution { background: #FDE8D0; color: #8B4A1A; }
+  .stage-handover { background: var(--green-light); color: var(--green); }
+  .stage-completed { background: var(--parchment); color: var(--ink-mid); }
+  .deliverables { padding: 14px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .del-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-mid); }
+  .del-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .del-dot.approved { background: var(--green); }
-  .del-dot.working  { background: var(--amber); }
-  .del-dot.empty    { background: var(--border-strong); }
-
-  .del-link {
-    font-size: 12px;
-    color: var(--blue);
-    text-decoration: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .del-link:hover { text-decoration: underline; }
-
-  .card-footer {
-    border-top: 0.5px solid var(--border);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--cream);
-  }
+  .del-dot.working { background: var(--amber); }
+  .del-dot.empty { background: var(--border-strong); }
+  .card-footer { border-top: 0.5px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: var(--cream); }
   .card-date { font-size: 11px; color: var(--ink-light); }
-  .approved-flag {
-    font-size: 10px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--green);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
+  .approved-flag { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 4px; }
 
-  /* ── Modal ── */
-  .modal-bg {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(28,25,23,0.65);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(28,25,23,0.65); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-bg.open { display: flex; }
-
-  .modal {
-    background: var(--cream);
-    width: 100%;
-    max-width: 680px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .modal-header {
-    background: var(--ink);
-    color: var(--cream);
-    padding: 24px 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .modal-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 300;
-  }
+  .modal { background: var(--cream); width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }
+  .modal-header { background: var(--ink); color: var(--cream); padding: 24px 28px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
   .modal-subtitle { font-size: 12px; color: rgba(247,244,239,0.6); margin-top: 4px; }
-  .modal-close {
-    background: none;
-    border: none;
-    color: rgba(247,244,239,0.5);
-    font-size: 20px;
-    cursor: pointer;
-    line-height: 1;
-  }
+  .modal-close { background: none; border: none; color: rgba(247,244,239,0.5); font-size: 20px; cursor: pointer; line-height: 1; }
   .modal-close:hover { color: var(--cream); }
-
   .modal-body { padding: 24px 28px; }
   .modal-section { margin-bottom: 24px; }
-  .modal-section-title {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    border-bottom: 0.5px solid var(--border);
-  }
-
-  /* Deliverable rows in modal */
-  .del-row {
-    display: grid;
-    grid-template-columns: 140px 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--border);
-  }
+  .modal-section-title { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+  .del-row { display: grid; grid-template-columns: 140px 1fr auto; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
   .del-row:last-child { border-bottom: none; }
   .del-name { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .del-url-input {
-    border: 0.5px solid var(--border-strong);
-    padding: 7px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    color: var(--ink);
-    background: white;
-    outline: none;
-    width: 100%;
-  }
+  .del-url-input { border: 0.5px solid var(--border-strong); padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); background: white; outline: none; width: 100%; }
   .del-url-input:focus { border-color: var(--ink); }
-  .del-status-select {
-    border: 0.5px solid var(--border-strong);
-    padding: 7px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    background: white;
-    outline: none;
-    cursor: pointer;
-    color: var(--ink);
-  }
-
-  /* Form fields */
+  .del-status-select { border: 0.5px solid var(--border-strong); padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; background: white; outline: none; cursor: pointer; color: var(--ink); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
   .form-label { font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-mid); }
-  .form-input, .form-select {
-    border: 0.5px solid var(--border-strong);
-    padding: 9px 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    background: white;
-    outline: none;
-  }
+  .form-input, .form-select { border: 0.5px solid var(--border-strong); padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink); background: white; outline: none; }
   .form-input:focus, .form-select:focus { border-color: var(--ink); }
   .form-select { cursor: pointer; }
-
-  .modal-save-btn {
-    background: var(--ink);
-    color: var(--cream);
-    border: none;
-    padding: 12px 28px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
+  .modal-save-btn { background: var(--ink); color: var(--cream); border: none; padding: 12px 28px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
   .modal-save-btn:hover { background: var(--ink-mid); }
-  .modal-cancel-btn {
-    background: transparent;
-    color: var(--ink-mid);
-    border: 0.5px solid var(--border-strong);
-    padding: 12px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    cursor: pointer;
-    margin-right: 10px;
-  }
+  .modal-cancel-btn { background: transparent; color: var(--ink-mid); border: 0.5px solid var(--border-strong); padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; margin-right: 10px; }
   .modal-cancel-btn:hover { background: var(--parchment); }
-
-  /* Empty state */
-  .empty-state {
-    grid-column: 1/-1;
-    text-align: center;
-    padding: 80px 20px;
-    color: var(--ink-light);
-  }
-  .empty-state-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    margin-bottom: 8px;
-    color: var(--ink-mid);
-  }
-
-  /* Client restricted view */
-  .client-notice {
-    background: var(--parchment);
-    border-bottom: 0.5px solid var(--border);
-    padding: 10px 32px;
-    font-size: 12px;
-    color: var(--ink-mid);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .del-view-link {
-    color: var(--blue);
-    font-size: 12px;
-    text-decoration: none;
-  }
+  .empty-state { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--ink-light); }
+  .empty-state-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 8px; color: var(--ink-mid); }
+  .client-notice { background: var(--parchment); border-bottom: 0.5px solid var(--border); padding: 10px 32px; font-size: 12px; color: var(--ink-mid); display: flex; align-items: center; gap: 8px; }
+  .del-view-link { color: var(--blue); font-size: 12px; text-decoration: none; }
   .del-view-link:hover { text-decoration: underline; }
-
   .no-file { font-size: 12px; color: var(--ink-light); font-style: italic; }
-
+  .delete-btn { background: transparent; border: 0.5px solid #c44; color: #c44; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; margin-right: auto; }
+  .delete-btn:hover { background: #fff0f0; }
   @media (max-width: 600px) {
-    main { padding: 16px; }
-    header { padding: 0 16px; }
-    .toolbar { padding: 10px 16px; }
-    .form-row { grid-template-columns: 1fr; }
-    .del-row { grid-template-columns: 1fr; }
+    main { padding: 16px; } header { padding: 0 16px; } .toolbar { padding: 10px 16px; }
+    .form-row { grid-template-columns: 1fr; } .del-row { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- Auth Screen -->
 <div id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">The Design Shop</div>
-    <div class="auth-tagline">Project Portal</div>
+    <div class="auth-tagline">designing + building thoughtful spaces</div>
     <label class="auth-label">Access code</label>
     <input class="auth-input" type="password" id="auth-input" placeholder="Enter your code" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="auth-btn" onclick="doLogin()">Enter</button>
     <div class="auth-error" id="auth-error">Incorrect code. Please try again.</div>
-    <div class="auth-roles">
-      <strong>Access codes:</strong><br>
-      Team: <code>admin123</code> &nbsp;|&nbsp; Partner: <code>kyra2023</code><br>
-      Clients get a project-specific code<br>
-      <em style="font-size:10px">Change these in the script section below</em>
-    </div>
   </div>
 </div>
 
-<!-- App -->
 <div id="app">
   <header>
     <div class="header-logo">The Design Shop</div>
     <div class="header-right">
+      <div class="saving-indicator" id="saving-indicator">
+        <div class="saving-dot"></div>
+        <span>Saving…</span>
+      </div>
       <div class="role-badge" id="role-display">—</div>
       <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
@@ -556,7 +175,7 @@
     </div>
     <div class="toolbar-sep"></div>
     <div class="toolbar-section">
-      <button class="filter-btn" onclick="setStageFilter('all-s',this)" id="sf-all-s" style="background:var(--ink);color:var(--cream);border-color:var(--ink)">All stages</button>
+      <button class="filter-btn active" onclick="setStageFilter('all-s',this)">All stages</button>
       <button class="filter-btn" onclick="setStageFilter('Schematic Design',this)">Schematic</button>
       <button class="filter-btn" onclick="setStageFilter('Design Development',this)">DD</button>
       <button class="filter-btn" onclick="setStageFilter('Execution',this)">Execution</button>
@@ -567,11 +186,15 @@
   </div>
 
   <main>
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid">
+      <div class="loading-screen">
+        <div class="loading-text">Loading projects…</div>
+        <div class="loading-sub">Fetching from database</div>
+      </div>
+    </div>
   </main>
 </div>
 
-<!-- Project detail / edit modal -->
 <div class="modal-bg" id="modal">
   <div class="modal">
     <div class="modal-header">
@@ -586,122 +209,78 @@
 </div>
 
 <script>
-// ─── CONFIG: Change passwords and firm name here ───────────────────────────
-const FIRM_NAME = "The Design Shop";
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const JSONBIN_API_KEY = '$2a$10$JgJRPubqsmrArEOmQxDXJ.IzsAgUF3UqH9udebpggaTRBnZimSYQ2';
+const JSONBIN_BIN_ID  = '';  // Will be created on first save automatically
+
 const PASSWORDS = {
-  "admin123":    { role: "team",    label: "Team" },
-  "kyra2023": { role: "partner", label: "Partner" },
+  'tds2024':     { role: 'team',    label: 'Team' },
+  'tdsadmin':    { role: 'partner', label: 'Partner' },
 };
-// Client passwords map to a project ID — add one per project
 const CLIENT_PASSWORDS = {
-  "raj-home":    "PRJ001",
-  "mehra-cafe":  "PRJ002",
+  // 'clientcode': 'PRJXXX',   <- add client codes here
 };
-// ────────────────────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────────────────
 
-const DELIVERABLES = [
-  "Questionnaire",
-  "Appliance list",
-  "Moodboard",
-  "Furniture layout",
-  "Design file",
-  "Detail drawings",
-  "False ceiling",
-  "Sourcing file"
-];
+const DELIVERABLES = ['Questionnaire','Appliance list','Moodboard','Furniture layout','Design file','Detail drawings','False ceiling','Sourcing file'];
+const STAGES = ['Schematic Design','Design Development','Tender','Execution','Handover','Completed'];
+const STAGE_CLASS = { 'Schematic Design':'stage-schematic','Design Development':'stage-dd','Tender':'stage-tender','Execution':'stage-execution','Handover':'stage-handover','Completed':'stage-completed' };
 
-const STAGES = [
-  "Schematic Design",
-  "Design Development",
-  "Tender",
-  "Execution",
-  "Handover",
-  "Completed"
-];
-
-const STAGE_CLASS = {
-  "Schematic Design":   "stage-schematic",
-  "Design Development": "stage-dd",
-  "Tender":             "stage-tender",
-  "Execution":          "stage-execution",
-  "Handover":           "stage-handover",
-  "Completed":          "stage-completed",
-};
-
-// ── State ──────────────────────────────────────────────────────────────────
 let currentRole = null;
 let currentClientProject = null;
 let filterCat = 'all';
 let filterStage = 'all-s';
 let filterSearch = '';
 let editingId = null;
+let projects = [];
+let binId = JSONBIN_BIN_ID;
+let saveTimer = null;
 
-// ── Sample projects (replace with your own, or clear the array) ────────────
-let projects = [
-  {
-    id: "PRJ001",
-    name: "Raj Residence",
-    client: "Rajesh & Priya Kumar",
-    category: "Residential",
-    stage: "Design Development",
-    location: "Anna Nagar, Chennai",
-    area: "3200 sq ft",
-    startDate: "2024-09",
-    approved: false,
-    deliverables: {
-      "Questionnaire":     { status: "approved", url: "https://drive.google.com/...", approvedUrl: "" },
-      "Appliance list":    { status: "approved", url: "https://drive.google.com/...", approvedUrl: "" },
-      "Moodboard":         { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Furniture layout":  { status: "working",  url: "https://drive.google.com/...", approvedUrl: "" },
-      "Design file":       { status: "empty",    url: "", approvedUrl: "" },
-      "Detail drawings":   { status: "empty",    url: "", approvedUrl: "" },
-      "False ceiling":     { status: "empty",    url: "", approvedUrl: "" },
-      "Sourcing file":     { status: "empty",    url: "", approvedUrl: "" },
+// ── JSONBin helpers ────────────────────────────────────────────────────────
+async function loadFromDB() {
+  const storedBinId = localStorage.getItem('tds_bin_id') || binId;
+  if (!storedBinId) { projects = []; return; }
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${storedBinId}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    const data = await res.json();
+    projects = data.record.projects || [];
+    binId = storedBinId;
+  } catch(e) { projects = []; }
+}
+
+async function saveToDB() {
+  showSaving(true);
+  try {
+    if (!binId) {
+      const res = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Name': 'tds-portal', 'X-Bin-Private': 'true' },
+        body: JSON.stringify({ projects })
+      });
+      const data = await res.json();
+      binId = data.metadata.id;
+      localStorage.setItem('tds_bin_id', binId);
+    } else {
+      await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify({ projects })
+      });
     }
-  },
-  {
-    id: "PRJ002",
-    name: "Mehra Café",
-    client: "Ananya Mehra",
-    category: "Hospitality",
-    stage: "Execution",
-    location: "Banjara Hills, Hyderabad",
-    area: "1800 sq ft",
-    startDate: "2024-06",
-    approved: true,
-    deliverables: {
-      "Questionnaire":     { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Appliance list":    { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Moodboard":         { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Furniture layout":  { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Design file":       { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-      "Detail drawings":   { status: "working",  url: "https://drive.google.com/...", approvedUrl: "" },
-      "False ceiling":     { status: "working",  url: "https://drive.google.com/...", approvedUrl: "" },
-      "Sourcing file":     { status: "approved", url: "https://drive.google.com/...", approvedUrl: "https://drive.google.com/..." },
-    }
-  },
-  {
-    id: "PRJ003",
-    name: "Sharma Office",
-    client: "Vikram Sharma",
-    category: "Office",
-    stage: "Schematic Design",
-    location: "Whitefield, Bengaluru",
-    area: "5500 sq ft",
-    startDate: "2024-11",
-    approved: false,
-    deliverables: {
-      "Questionnaire":     { status: "approved", url: "https://drive.google.com/...", approvedUrl: "" },
-      "Appliance list":    { status: "empty",    url: "", approvedUrl: "" },
-      "Moodboard":         { status: "working",  url: "https://drive.google.com/...", approvedUrl: "" },
-      "Furniture layout":  { status: "empty",    url: "", approvedUrl: "" },
-      "Design file":       { status: "empty",    url: "", approvedUrl: "" },
-      "Detail drawings":   { status: "empty",    url: "", approvedUrl: "" },
-      "False ceiling":     { status: "empty",    url: "", approvedUrl: "" },
-      "Sourcing file":     { status: "empty",    url: "", approvedUrl: "" },
-    }
-  }
-];
+  } catch(e) { console.error('Save failed', e); }
+  showSaving(false);
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToDB, 1000);
+}
+
+function showSaving(on) {
+  document.getElementById('saving-indicator').classList.toggle('show', on);
+}
 
 // ── Auth ───────────────────────────────────────────────────────────────────
 function doLogin() {
@@ -720,18 +299,18 @@ function doLogin() {
   }
 }
 
-function successLogin(label) {
+async function successLogin(label) {
   document.getElementById('auth-screen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
   document.getElementById('role-display').textContent = label;
   document.getElementById('client-notice').style.display = currentRole === 'client' ? 'flex' : 'none';
   document.getElementById('add-btn').style.display = (currentRole === 'team' || currentRole === 'partner') ? 'block' : 'none';
+  await loadFromDB();
   renderGrid();
 }
 
 function doLogout() {
-  currentRole = null;
-  currentClientProject = null;
+  currentRole = null; currentClientProject = null;
   document.getElementById('auth-screen').classList.remove('hidden');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('auth-input').value = '';
@@ -748,20 +327,12 @@ function setFilter(val, btn) {
 
 function setStageFilter(val, btn) {
   filterStage = val;
-  document.querySelectorAll('.toolbar-section:nth-child(3) .filter-btn').forEach(b => {
-    b.classList.remove('active');
-    b.style.background = '';
-    b.style.color = '';
-    b.style.borderColor = '';
-  });
+  document.querySelectorAll('.toolbar-section:nth-child(3) .filter-btn').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor=''; });
   btn.classList.add('active');
   renderGrid();
 }
 
-function setSearch(val) {
-  filterSearch = val.toLowerCase();
-  renderGrid();
-}
+function setSearch(val) { filterSearch = val.toLowerCase(); renderGrid(); }
 
 function filteredProjects() {
   return projects.filter(p => {
@@ -773,31 +344,24 @@ function filteredProjects() {
   });
 }
 
-// ── Render grid ────────────────────────────────────────────────────────────
+// ── Render ─────────────────────────────────────────────────────────────────
 function renderGrid() {
   const grid = document.getElementById('grid');
   const fps = filteredProjects();
-
   if (fps.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-state-title">No projects found</div><p style="font-size:13px;color:var(--ink-light)">Try adjusting your filters.</p></div>`;
+    grid.innerHTML = `<div class="empty-state"><div class="empty-state-title">No projects found</div><p style="font-size:13px;color:var(--ink-light)">Try adjusting your filters or add a new project.</p></div>`;
     return;
   }
-
   grid.innerHTML = fps.map(p => cardHTML(p)).join('');
 }
 
 function cardHTML(p) {
   const dels = DELIVERABLES.map(d => {
-    const info = p.deliverables[d] || { status: 'empty', url: '' };
-    return `<div class="del-item">
-      <div class="del-dot ${info.status}"></div>
-      <span>${d}</span>
-    </div>`;
+    const info = p.deliverables[d] || { status: 'empty' };
+    return `<div class="del-item"><div class="del-dot ${info.status}"></div><span>${d}</span></div>`;
   }).join('');
-
   const approvedCount = DELIVERABLES.filter(d => p.deliverables[d] && p.deliverables[d].status === 'approved').length;
   const workingCount  = DELIVERABLES.filter(d => p.deliverables[d] && p.deliverables[d].status === 'working').length;
-
   return `<div class="card" onclick="openProject('${p.id}')">
     <div class="card-top">
       <div>
@@ -810,32 +374,20 @@ function cardHTML(p) {
     <div class="deliverables">${dels}</div>
     <div class="card-footer">
       <div class="card-date">${approvedCount} approved · ${workingCount} in progress</div>
-      ${p.approved ? `<div class="approved-flag">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        All approved
-      </div>` : ''}
+      ${p.approved ? `<div class="approved-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>All approved</div>` : ''}
     </div>
   </div>`;
 }
 
-// ── Open project modal ─────────────────────────────────────────────────────
+// ── Project modal ──────────────────────────────────────────────────────────
 function openProject(id) {
   const p = projects.find(x => x.id === id);
   if (!p) return;
   editingId = id;
-
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-subtitle').textContent = `${p.client} · ${p.category} · ${p.area}`;
-
   const isTeam = currentRole === 'team' || currentRole === 'partner';
-  const body = document.getElementById('modal-body');
-
-  if (isTeam) {
-    body.innerHTML = teamModalBody(p);
-  } else {
-    body.innerHTML = clientModalBody(p);
-  }
-
+  document.getElementById('modal-body').innerHTML = isTeam ? teamModalBody(p) : clientModalBody(p);
   document.getElementById('modal').classList.add('open');
 }
 
@@ -843,45 +395,30 @@ function clientModalBody(p) {
   const rows = DELIVERABLES.map(d => {
     const info = p.deliverables[d] || { status: 'empty', approvedUrl: '' };
     if (info.status !== 'approved' || !info.approvedUrl) {
-      return `<div class="del-row">
-        <div class="del-name">${d}</div>
-        <span class="no-file">Not yet approved</span>
-        <span></span>
-      </div>`;
+      return `<div class="del-row"><div class="del-name">${d}</div><span class="no-file">Not yet approved</span><span></span></div>`;
     }
-    return `<div class="del-row">
-      <div class="del-name">${d}</div>
-      <a href="${info.approvedUrl}" target="_blank" class="del-view-link">View approved file ↗</a>
-      <div class="del-dot approved" style="width:8px;height:8px"></div>
-    </div>`;
+    return `<div class="del-row"><div class="del-name">${d}</div><a href="${info.approvedUrl}" target="_blank" class="del-view-link">View file ↗</a><div class="del-dot approved" style="width:8px;height:8px"></div></div>`;
   }).join('');
-
-  return `<div class="modal-section">
-    <div class="modal-section-title">Approved deliverables</div>
-    ${rows}
-  </div>
-  <div class="modal-section">
-    <div class="modal-section-title">Project info</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--ink-mid)">
-      <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Stage</span><br>${p.stage}</div>
-      <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Area</span><br>${p.area}</div>
-      <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Location</span><br>${p.location}</div>
-      <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Started</span><br>${p.startDate}</div>
-    </div>
-  </div>`;
+  return `<div class="modal-section"><div class="modal-section-title">Approved deliverables</div>${rows}</div>
+  <div class="modal-section"><div class="modal-section-title">Project info</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--ink-mid)">
+    <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Stage</span><br>${p.stage}</div>
+    <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Area</span><br>${p.area}</div>
+    <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Location</span><br>${p.location}</div>
+    <div><span style="color:var(--ink-light);font-size:11px;text-transform:uppercase;letter-spacing:.07em">Started</span><br>${p.startDate}</div>
+  </div></div>`;
 }
 
 function teamModalBody(p) {
   const stageOpts = STAGES.map(s => `<option value="${s}" ${p.stage===s?'selected':''}>${s}</option>`).join('');
   const catOpts = ['Residential','Commercial','Hospitality','Office','Other'].map(c => `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('');
-
   const delRows = DELIVERABLES.map(d => {
     const info = p.deliverables[d] || { status: 'empty', url: '', approvedUrl: '' };
-    return `<div class="del-row" id="delrow-${d.replace(/\s/g,'_')}">
+    return `<div class="del-row">
       <div class="del-name">${d}</div>
       <div style="display:flex;flex-direction:column;gap:6px">
-        <input class="del-url-input" placeholder="Working Drive link" value="${info.url || ''}" data-del="${d}" data-type="url">
-        <input class="del-url-input" placeholder="Approved final Drive link" value="${info.approvedUrl || ''}" data-del="${d}" data-type="approvedUrl" style="border-color:${info.approvedUrl?'var(--green)':''}">
+        <input class="del-url-input" placeholder="Working Drive link" value="${info.url||''}" data-del="${d}" data-type="url">
+        <input class="del-url-input" placeholder="Approved final Drive link" value="${info.approvedUrl||''}" data-del="${d}" data-type="approvedUrl" style="border-color:${info.approvedUrl?'var(--green)':''}">
       </div>
       <select class="del-status-select" data-del="${d}" data-type="status">
         <option value="empty" ${info.status==='empty'?'selected':''}>Empty</option>
@@ -890,71 +427,42 @@ function teamModalBody(p) {
       </select>
     </div>`;
   }).join('');
-
-  return `<div class="modal-section">
-    <div class="modal-section-title">Project details</div>
+  return `<div class="modal-section"><div class="modal-section-title">Project details</div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Project name</label>
-        <input class="form-input" id="f-name" value="${p.name}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Client name</label>
-        <input class="form-input" id="f-client" value="${p.client}">
-      </div>
+      <div class="form-group"><label class="form-label">Project name</label><input class="form-input" id="f-name" value="${p.name}"></div>
+      <div class="form-group"><label class="form-label">Client name</label><input class="form-input" id="f-client" value="${p.client}"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="f-cat">${catOpts}</select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Stage</label>
-        <select class="form-select" id="f-stage">${stageOpts}</select>
-      </div>
+      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-cat">${catOpts}</select></div>
+      <div class="form-group"><label class="form-label">Stage</label><select class="form-select" id="f-stage">${stageOpts}</select></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Location</label>
-        <input class="form-input" id="f-loc" value="${p.location}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Area</label>
-        <input class="form-input" id="f-area" value="${p.area}">
-      </div>
+      <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-loc" value="${p.location}"></div>
+      <div class="form-group"><label class="form-label">Area</label><input class="form-input" id="f-area" value="${p.area}"></div>
     </div>
   </div>
-
-  <div class="modal-section">
-    <div class="modal-section-title">Deliverables — paste Google Drive share links</div>
-    <div style="font-size:11px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">
-      Top link = working/reference file &nbsp;·&nbsp; Bottom link = client-approved final &nbsp;·&nbsp; Set status accordingly
-    </div>
+  <div class="modal-section"><div class="modal-section-title">Deliverables — paste Google Drive share links</div>
+    <div style="font-size:11px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Top link = working file &nbsp;·&nbsp; Bottom link = client-approved final &nbsp;·&nbsp; Set status accordingly</div>
     ${delRows}
   </div>
-
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
     <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
-      <input type="checkbox" id="f-approved" ${p.approved?'checked':''}>
-      All deliverables approved by client
+      <input type="checkbox" id="f-approved" ${p.approved?'checked':''}> All deliverables approved by client
     </label>
   </div>
-
-  <div style="margin-top:20px;display:flex;gap:0">
+  <div style="margin-top:20px;display:flex;gap:0;align-items:center">
+    <button class="delete-btn" onclick="deleteProject('${p.id}')">Delete project</button>
     <button class="modal-cancel-btn" onclick="closeModal()">Cancel</button>
     <button class="modal-save-btn" onclick="saveProject()">Save project</button>
   </div>`;
 }
 
-// ── Add new project modal ──────────────────────────────────────────────────
 function openAddModal() {
-  editingId = null;
   const newP = {
-    id: 'PRJ' + String(Date.now()).slice(-4),
+    id: 'PRJ' + Date.now(),
     name: '', client: '', category: 'Residential', stage: 'Schematic Design',
     location: '', area: '', startDate: new Date().toISOString().slice(0,7),
-    approved: false,
-    deliverables: {}
+    approved: false, deliverables: {}
   };
   DELIVERABLES.forEach(d => { newP.deliverables[d] = { status: 'empty', url: '', approvedUrl: '' }; });
   projects.push(newP);
@@ -964,11 +472,9 @@ function openAddModal() {
   document.getElementById('modal-subtitle').textContent = 'Fill in details and save';
 }
 
-// ── Save ───────────────────────────────────────────────────────────────────
 function saveProject() {
   const p = projects.find(x => x.id === editingId);
   if (!p) return;
-
   p.name     = document.getElementById('f-name').value;
   p.client   = document.getElementById('f-client').value;
   p.category = document.getElementById('f-cat').value;
@@ -976,16 +482,22 @@ function saveProject() {
   p.location = document.getElementById('f-loc').value;
   p.area     = document.getElementById('f-area').value;
   p.approved = document.getElementById('f-approved').checked;
-
   document.querySelectorAll('[data-del]').forEach(el => {
-    const d = el.dataset.del;
-    const type = el.dataset.type;
+    const d = el.dataset.del, type = el.dataset.type;
     if (!p.deliverables[d]) p.deliverables[d] = { status: 'empty', url: '', approvedUrl: '' };
     p.deliverables[d][type] = el.value;
   });
-
   closeModal();
   renderGrid();
+  scheduleSave();
+}
+
+function deleteProject(id) {
+  if (!confirm('Delete this project? This cannot be undone.')) return;
+  projects = projects.filter(p => p.id !== id);
+  closeModal();
+  renderGrid();
+  scheduleSave();
 }
 
 function closeModal() {
