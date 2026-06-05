@@ -8,24 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F7F4EF;
-    --parchment: #EDE8DF;
-    --ink: #1C1917;
-    --ink-mid: #4A4540;
-    --ink-light: #8A8078;
-    --accent: #C4703A;
-    --green: #3A6B4A;
-    --green-light: #D8EBE0;
-    --amber: #9B7A1A;
-    --amber-light: #F5EDD0;
-    --blue: #2A5180;
-    --blue-light: #D5E4F0;
-    --border: rgba(28,25,23,0.12);
-    --border-strong: rgba(28,25,23,0.25);
+    --cream: #F7F4EF; --parchment: #EDE8DF; --ink: #1C1917; --ink-mid: #4A4540; --ink-light: #8A8078;
+    --accent: #C4703A; --green: #3A6B4A; --green-light: #D8EBE0; --amber: #9B7A1A; --amber-light: #F5EDD0;
+    --blue: #2A5180; --blue-light: #D5E4F0; --border: rgba(28,25,23,0.12); --border-strong: rgba(28,25,23,0.25);
+    --red: #8B2020; --red-light: #F5E0E0; --purple: #4A2D9A; --purple-light: #F0E8FF;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; font-size: 14px; }
 
+  /* AUTH */
   #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--ink); position: fixed; inset: 0; z-index: 100; flex-direction: column; }
   #auth-screen.hidden { display: none; }
   .auth-box { width: 340px; padding: 48px 40px 40px; background: var(--cream); }
@@ -34,10 +25,11 @@
   .auth-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 6px; display: block; }
   .auth-input { width: 100%; border: 0.5px solid var(--border-strong); background: white; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); outline: none; margin-bottom: 20px; }
   .auth-input:focus { border-color: var(--ink); }
-  .auth-btn { width: 100%; background: var(--ink); color: var(--cream); border: none; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .auth-btn { width: 100%; background: var(--ink); color: var(--cream); border: none; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
   .auth-btn:hover { background: var(--ink-mid); }
   .auth-error { font-size: 12px; color: #b33; margin-top: 12px; display: none; }
 
+  /* APP */
   #app { display: none; }
   #app.visible { display: block; }
 
@@ -47,12 +39,21 @@
   .role-badge { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border: 0.5px solid rgba(247,244,239,0.3); color: rgba(247,244,239,0.7); }
   .logout-btn { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: none; color: rgba(247,244,239,0.5); cursor: pointer; font-family: 'DM Sans', sans-serif; }
   .logout-btn:hover { color: var(--cream); }
-
   .saving-indicator { font-size: 11px; color: rgba(247,244,239,0.5); display: none; align-items: center; gap: 6px; }
   .saving-indicator.show { display: flex; }
   .saving-dot { width: 6px; height: 6px; border-radius: 50%; background: #6BCB8B; animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+  /* NAV TABS */
+  .nav-tabs { background: white; border-bottom: 0.5px solid var(--border); display: flex; padding: 0 32px; gap: 0; }
+  .nav-tab { padding: 14px 20px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; color: var(--ink-light); transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .nav-tab.partner-only { color: var(--red); }
+  .nav-tab.partner-only.active { border-bottom-color: var(--red); }
+  .lock-icon { font-size: 11px; }
+
+  /* TOOLBAR */
   .toolbar { background: white; border-bottom: 0.5px solid var(--border); padding: 12px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .toolbar-section { display: flex; gap: 8px; align-items: center; }
   .filter-btn { font-size: 12px; letter-spacing: 0.04em; padding: 6px 14px; border: 0.5px solid var(--border-strong); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--ink-mid); transition: all 0.15s; }
@@ -60,16 +61,16 @@
   .toolbar-sep { width: 0.5px; height: 20px; background: var(--border); }
   .search-input { border: 0.5px solid var(--border-strong); padding: 6px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink); background: white; outline: none; width: 200px; }
   .search-input:focus { border-color: var(--ink); }
-  .add-btn { margin-left: auto; background: var(--accent); color: white; border: none; padding: 7px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .add-btn { margin-left: auto; background: var(--accent); color: white; border: none; padding: 7px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
   .add-btn:hover { background: #a85e2e; }
 
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
   main { padding: 28px 32px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 
-  .loading-screen { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
-  .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--ink-mid); }
-  .loading-sub { font-size: 13px; color: var(--ink-light); margin-top: 8px; }
-
+  /* PROJECT CARDS */
   .card { background: white; border: 0.5px solid var(--border); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; cursor: pointer; }
   .card:hover { border-color: var(--border-strong); box-shadow: 0 4px 20px rgba(28,25,23,0.06); }
   .card-top { padding: 20px 20px 0; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -93,10 +94,44 @@
   .card-date { font-size: 11px; color: var(--ink-light); }
   .approved-flag { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 4px; }
 
+  /* KNOWLEDGE BASE (read-only team) */
+  .kb-section { margin-bottom: 32px; }
+  .kb-section-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 4px; }
+  .kb-section-sub { font-size: 12px; color: var(--ink-light); margin-bottom: 16px; }
+  .kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .kb-card { background: white; border: 0.5px solid var(--border); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .kb-card-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .kb-card-desc { font-size: 12px; color: var(--ink-light); line-height: 1.6; }
+  .kb-card-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--blue); text-decoration: none; margin-top: 4px; }
+  .kb-card-link:hover { text-decoration: underline; }
+  .kb-card-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; align-self: flex-start; }
+  .tag-design { background: var(--purple-light); color: var(--purple); }
+  .tag-technical { background: var(--blue-light); color: var(--blue); }
+  .tag-material { background: var(--amber-light); color: var(--amber); }
+  .tag-template { background: var(--green-light); color: var(--green); }
+  .kb-empty { font-size: 13px; color: var(--ink-light); font-style: italic; padding: 20px 0; }
+  .kb-add-btn { background: transparent; border: 0.5px dashed var(--border-strong); padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink-light); cursor: pointer; text-align: left; width: 100%; }
+  .kb-add-btn:hover { background: white; color: var(--ink); }
+
+  /* PRIVATE VAULT */
+  .vault-notice { background: var(--red-light); border: 0.5px solid rgba(139,32,32,0.2); padding: 12px 20px; font-size: 12px; color: var(--red); display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+  .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .vault-card { background: white; border: 0.5px solid var(--border); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .vault-card-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .vault-card-desc { font-size: 12px; color: var(--ink-light); line-height: 1.6; }
+  .vault-card-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--red); text-decoration: none; margin-top: 4px; }
+  .vault-card-link:hover { text-decoration: underline; }
+  .vault-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; align-self: flex-start; }
+  .tag-hr { background: var(--red-light); color: var(--red); }
+  .tag-finance { background: var(--amber-light); color: var(--amber); }
+  .tag-legal { background: var(--purple-light); color: var(--purple); }
+
+  /* MODAL */
   .modal-bg { display: none; position: fixed; inset: 0; background: rgba(28,25,23,0.65); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-bg.open { display: flex; }
   .modal { background: var(--cream); width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }
   .modal-header { background: var(--ink); color: var(--cream); padding: 24px 28px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-header.vault-header { background: var(--red); }
   .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
   .modal-subtitle { font-size: 12px; color: rgba(247,244,239,0.6); margin-top: 4px; }
   .modal-close { background: none; border: none; color: rgba(247,244,239,0.5); font-size: 20px; cursor: pointer; line-height: 1; }
@@ -113,23 +148,28 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
   .form-label { font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-mid); }
-  .form-input, .form-select { border: 0.5px solid var(--border-strong); padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink); background: white; outline: none; }
-  .form-input:focus, .form-select:focus { border-color: var(--ink); }
+  .form-input, .form-select, .form-textarea { border: 0.5px solid var(--border-strong); padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink); background: white; outline: none; width: 100%; }
+  .form-textarea { resize: vertical; min-height: 70px; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--ink); }
   .form-select { cursor: pointer; }
-  .modal-save-btn { background: var(--ink); color: var(--cream); border: none; padding: 12px 28px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .modal-save-btn { background: var(--ink); color: var(--cream); border: none; padding: 12px 28px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; }
   .modal-save-btn:hover { background: var(--ink-mid); }
+  .modal-save-btn.red { background: var(--red); }
   .modal-cancel-btn { background: transparent; color: var(--ink-mid); border: 0.5px solid var(--border-strong); padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; margin-right: 10px; }
   .modal-cancel-btn:hover { background: var(--parchment); }
+  .delete-btn { background: transparent; border: 0.5px solid #c44; color: #c44; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; margin-right: auto; }
+  .delete-btn:hover { background: #fff0f0; }
   .empty-state { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--ink-light); }
   .empty-state-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 8px; color: var(--ink-mid); }
   .client-notice { background: var(--parchment); border-bottom: 0.5px solid var(--border); padding: 10px 32px; font-size: 12px; color: var(--ink-mid); display: flex; align-items: center; gap: 8px; }
   .del-view-link { color: var(--blue); font-size: 12px; text-decoration: none; }
   .del-view-link:hover { text-decoration: underline; }
   .no-file { font-size: 12px; color: var(--ink-light); font-style: italic; }
-  .delete-btn { background: transparent; border: 0.5px solid #c44; color: #c44; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; margin-right: auto; }
-  .delete-btn:hover { background: #fff0f0; }
+  .loading-screen { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
+  .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--ink-mid); }
+  .loading-sub { font-size: 13px; color: var(--ink-light); margin-top: 8px; }
   @media (max-width: 600px) {
-    main { padding: 16px; } header { padding: 0 16px; } .toolbar { padding: 10px 16px; }
+    main { padding: 16px; } header { padding: 0 16px; } .nav-tabs { padding: 0 16px; }
     .form-row { grid-template-columns: 1fr; } .del-row { grid-template-columns: 1fr; }
   }
 </style>
@@ -151,10 +191,7 @@
   <header>
     <div class="header-logo">The Design Shop</div>
     <div class="header-right">
-      <div class="saving-indicator" id="saving-indicator">
-        <div class="saving-dot"></div>
-        <span>Saving…</span>
-      </div>
+      <div class="saving-indicator" id="saving-indicator"><div class="saving-dot"></div><span>Saving…</span></div>
       <div class="role-badge" id="role-display">—</div>
       <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
@@ -165,99 +202,167 @@
     You are viewing approved project files only. Contact your designer for questions.
   </div>
 
-  <div class="toolbar">
-    <div class="toolbar-section">
-      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('Residential',this)">Residential</button>
-      <button class="filter-btn" onclick="setFilter('Commercial',this)">Commercial</button>
-      <button class="filter-btn" onclick="setFilter('Hospitality',this)">Hospitality</button>
-      <button class="filter-btn" onclick="setFilter('Office',this)">Office</button>
-    </div>
-    <div class="toolbar-sep"></div>
-    <div class="toolbar-section">
-      <button class="filter-btn active" onclick="setStageFilter('all-s',this)">All stages</button>
-      <button class="filter-btn" onclick="setStageFilter('Schematic Design',this)">Schematic</button>
-      <button class="filter-btn" onclick="setStageFilter('Design Development',this)">DD</button>
-      <button class="filter-btn" onclick="setStageFilter('Execution',this)">Execution</button>
-      <button class="filter-btn" onclick="setStageFilter('Completed',this)">Completed</button>
-    </div>
-    <input class="search-input" type="text" placeholder="Search projects…" oninput="setSearch(this.value)">
-    <button class="add-btn" id="add-btn" onclick="openAddModal()" style="display:none">+ Add project</button>
+  <!-- NAV TABS -->
+  <div class="nav-tabs" id="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('projects')" id="tab-projects">Projects</div>
+    <div class="nav-tab" onclick="switchTab('knowledge')" id="tab-knowledge">Team Guidelines</div>
+    <div class="nav-tab partner-only" onclick="switchTab('vault')" id="tab-vault" style="display:none">🔒 Private Vault</div>
   </div>
 
-  <main>
-    <div class="grid" id="grid">
-      <div class="loading-screen">
-        <div class="loading-text">Loading projects…</div>
-        <div class="loading-sub">Fetching from database</div>
+  <!-- PROJECTS TAB -->
+  <div class="section active" id="section-projects">
+    <div class="toolbar">
+      <div class="toolbar-section">
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('Residential',this)">Residential</button>
+        <button class="filter-btn" onclick="setFilter('Commercial',this)">Commercial</button>
+        <button class="filter-btn" onclick="setFilter('Hospitality',this)">Hospitality</button>
+        <button class="filter-btn" onclick="setFilter('Office',this)">Office</button>
       </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-section">
+        <button class="filter-btn active" onclick="setStageFilter('all-s',this)">All stages</button>
+        <button class="filter-btn" onclick="setStageFilter('Schematic Design',this)">Schematic</button>
+        <button class="filter-btn" onclick="setStageFilter('Design Development',this)">DD</button>
+        <button class="filter-btn" onclick="setStageFilter('Execution',this)">Execution</button>
+        <button class="filter-btn" onclick="setStageFilter('Completed',this)">Completed</button>
+      </div>
+      <input class="search-input" type="text" placeholder="Search projects…" oninput="setSearch(this.value)">
+      <button class="add-btn" id="add-btn" onclick="openAddModal()" style="display:none">+ Add project</button>
     </div>
-  </main>
-</div>
+    <main><div class="grid" id="grid"><div class="loading-screen"><div class="loading-text">Loading projects…</div><div class="loading-sub">Fetching from database</div></div></div></main>
+  </div>
 
-<div class="modal-bg" id="modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="modal-title">Project</div>
-        <div class="modal-subtitle" id="modal-subtitle"></div>
+  <!-- TEAM GUIDELINES TAB (read-only for team, editable for partner) -->
+  <div class="section" id="section-knowledge">
+    <main>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)">Team Guidelines</div>
+          <div style="font-size:12px;color:var(--ink-light);margin-top:4px">Read-only reference for all team members</div>
+        </div>
+        <button class="add-btn" id="kb-add-btn" onclick="openKbModal()" style="display:none">+ Add document</button>
       </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
+
+      <div class="kb-section">
+        <div class="kb-section-title">Design standards</div>
+        <div class="kb-section-sub">Firm aesthetic rules, design principles, what we always do and never do</div>
+        <div class="kb-grid" id="kb-design"></div>
+      </div>
+      <div class="kb-section">
+        <div class="kb-section-title">Technical standards</div>
+        <div class="kb-section-sub">Drawing conventions, file naming, layer standards, submission formats</div>
+        <div class="kb-grid" id="kb-technical"></div>
+      </div>
+      <div class="kb-section">
+        <div class="kb-section-title">Materials & vendors</div>
+        <div class="kb-section-sub">Preferred materials, vendor contacts, spec formats</div>
+        <div class="kb-grid" id="kb-material"></div>
+      </div>
+      <div class="kb-section">
+        <div class="kb-section-title">Templates</div>
+        <div class="kb-section-sub">Standard templates your team can use and refer to</div>
+        <div class="kb-grid" id="kb-template"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- PRIVATE VAULT TAB (partner only) -->
+  <div class="section" id="section-vault">
+    <main>
+      <div class="vault-notice">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Private — visible only to partners. Team members cannot see this section.
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)">Private Vault</div>
+          <div style="font-size:12px;color:var(--ink-light);margin-top:4px">Confidential documents — HR, finance, legal</div>
+        </div>
+        <button class="add-btn" style="background:var(--red)" onclick="openVaultModal()">+ Add document</button>
+      </div>
+
+      <div class="kb-section">
+        <div class="kb-section-title">HR documents</div>
+        <div class="vault-grid" id="vault-hr"></div>
+      </div>
+      <div class="kb-section">
+        <div class="kb-section-title">Finance & quotations</div>
+        <div class="vault-grid" id="vault-finance"></div>
+      </div>
+      <div class="kb-section">
+        <div class="kb-section-title">Legal & contracts</div>
+        <div class="vault-grid" id="vault-legal"></div>
+      </div>
+    </main>
   </div>
 </div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-bg" id="modal"><div class="modal">
+  <div class="modal-header" id="modal-header">
+    <div><div class="modal-title" id="modal-title">Project</div><div class="modal-subtitle" id="modal-subtitle"></div></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="modal-body" id="modal-body"></div>
+</div></div>
+
+<!-- KB / VAULT MODAL -->
+<div class="modal-bg" id="doc-modal"><div class="modal">
+  <div class="modal-header" id="doc-modal-header">
+    <div><div class="modal-title" id="doc-modal-title">Add document</div></div>
+    <button class="modal-close" onclick="closeDocModal()">✕</button>
+  </div>
+  <div class="modal-body" id="doc-modal-body"></div>
+</div></div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────────────────────────
 const JSONBIN_API_KEY = '$2a$10$JgJRPubqsmrArEOmQxDXJ.IzsAgUF3UqH9udebpggaTRBnZimSYQ2';
-const JSONBIN_BIN_ID  = '';  // Will be created on first save automatically
 
+// ─── PASSWORDS ─────────────────────────────────────────────────────────────
 const PASSWORDS = {
-  'tds2024':     { role: 'team',    label: 'Team' },
-  'tdsadmin':    { role: 'partner', label: 'Partner' },
+  'tds2024':  { role: 'team',    label: 'Team' },
+  'tdsadmin': { role: 'partner', label: 'Partner' },
 };
 const CLIENT_PASSWORDS = {
-  // 'clientcode': 'PRJXXX',   <- add client codes here
+  // 'clientcode': 'PRJXXX',
 };
 // ──────────────────────────────────────────────────────────────────────────
 
 const DELIVERABLES = ['Questionnaire','Appliance list','Moodboard','Furniture layout','Design file','Detail drawings','False ceiling','Sourcing file'];
 const STAGES = ['Schematic Design','Design Development','Tender','Execution','Handover','Completed'];
 const STAGE_CLASS = { 'Schematic Design':'stage-schematic','Design Development':'stage-dd','Tender':'stage-tender','Execution':'stage-execution','Handover':'stage-handover','Completed':'stage-completed' };
+const KB_CATEGORIES = ['design','technical','material','template'];
+const VAULT_CATEGORIES = ['hr','finance','legal'];
 
-let currentRole = null;
-let currentClientProject = null;
-let filterCat = 'all';
-let filterStage = 'all-s';
-let filterSearch = '';
-let editingId = null;
-let projects = [];
-let binId = JSONBIN_BIN_ID;
+let currentRole = null, currentClientProject = null;
+let filterCat = 'all', filterStage = 'all-s', filterSearch = '';
+let editingId = null, editingDocId = null, editingDocType = null;
+let projects = [], kbDocs = [], vaultDocs = [];
+let binId = localStorage.getItem('tds_bin_id') || '';
 let saveTimer = null;
 
-// ── JSONBin helpers ────────────────────────────────────────────────────────
+// ── DB ─────────────────────────────────────────────────────────────────────
 async function loadFromDB() {
-  const storedBinId = localStorage.getItem('tds_bin_id') || binId;
-  if (!storedBinId) { projects = []; return; }
+  if (!binId) { projects = []; kbDocs = []; vaultDocs = []; return; }
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${storedBinId}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
-    });
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
     const data = await res.json();
-    projects = data.record.projects || [];
-    binId = storedBinId;
-  } catch(e) { projects = []; }
+    projects  = data.record.projects  || [];
+    kbDocs    = data.record.kbDocs    || [];
+    vaultDocs = data.record.vaultDocs || [];
+  } catch(e) { projects = []; kbDocs = []; vaultDocs = []; }
 }
 
 async function saveToDB() {
   showSaving(true);
+  const payload = { projects, kbDocs, vaultDocs };
   try {
     if (!binId) {
       const res = await fetch('https://api.jsonbin.io/v3/b', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Name': 'tds-portal', 'X-Bin-Private': 'true' },
-        body: JSON.stringify({ projects })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       binId = data.metadata.id;
@@ -266,37 +371,22 @@ async function saveToDB() {
       await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
-        body: JSON.stringify({ projects })
+        body: JSON.stringify(payload)
       });
     }
   } catch(e) { console.error('Save failed', e); }
   showSaving(false);
 }
 
-function scheduleSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveToDB, 1000);
-}
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveToDB, 1200); }
+function showSaving(on) { document.getElementById('saving-indicator').classList.toggle('show', on); }
 
-function showSaving(on) {
-  document.getElementById('saving-indicator').classList.toggle('show', on);
-}
-
-// ── Auth ───────────────────────────────────────────────────────────────────
+// ── AUTH ───────────────────────────────────────────────────────────────────
 function doLogin() {
   const val = document.getElementById('auth-input').value.trim();
-  const errEl = document.getElementById('auth-error');
-  if (PASSWORDS[val]) {
-    currentRole = PASSWORDS[val].role;
-    currentClientProject = null;
-    successLogin(PASSWORDS[val].label);
-  } else if (CLIENT_PASSWORDS[val]) {
-    currentRole = 'client';
-    currentClientProject = CLIENT_PASSWORDS[val];
-    successLogin('Client');
-  } else {
-    errEl.style.display = 'block';
-  }
+  if (PASSWORDS[val]) { currentRole = PASSWORDS[val].role; currentClientProject = null; successLogin(PASSWORDS[val].label); }
+  else if (CLIENT_PASSWORDS[val]) { currentRole = 'client'; currentClientProject = CLIENT_PASSWORDS[val]; successLogin('Client'); }
+  else { document.getElementById('auth-error').style.display = 'block'; }
 }
 
 async function successLogin(label) {
@@ -304,9 +394,18 @@ async function successLogin(label) {
   document.getElementById('app').classList.add('visible');
   document.getElementById('role-display').textContent = label;
   document.getElementById('client-notice').style.display = currentRole === 'client' ? 'flex' : 'none';
-  document.getElementById('add-btn').style.display = (currentRole === 'team' || currentRole === 'partner') ? 'block' : 'none';
+  const isTeam = currentRole === 'team' || currentRole === 'partner';
+  const isPartner = currentRole === 'partner';
+  document.getElementById('add-btn').style.display = isTeam ? 'block' : 'none';
+  document.getElementById('tab-vault').style.display = isPartner ? 'flex' : 'none';
+  if (document.getElementById('kb-add-btn')) document.getElementById('kb-add-btn').style.display = isPartner ? 'block' : 'none';
+  if (currentRole === 'client') {
+    document.getElementById('nav-tabs').style.display = 'none';
+  }
   await loadFromDB();
   renderGrid();
+  renderKb();
+  if (isPartner) renderVault();
 }
 
 function doLogout() {
@@ -315,25 +414,30 @@ function doLogout() {
   document.getElementById('app').classList.remove('visible');
   document.getElementById('auth-input').value = '';
   document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('nav-tabs').style.display = 'flex';
 }
 
-// ── Filters ────────────────────────────────────────────────────────────────
+// ── TABS ───────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'knowledge') { document.getElementById('kb-add-btn').style.display = currentRole === 'partner' ? 'block' : 'none'; }
+}
+
+// ── FILTERS ────────────────────────────────────────────────────────────────
 function setFilter(val, btn) {
   filterCat = val;
   document.querySelectorAll('.toolbar-section:first-child .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderGrid();
+  btn.classList.add('active'); renderGrid();
 }
-
 function setStageFilter(val, btn) {
   filterStage = val;
   document.querySelectorAll('.toolbar-section:nth-child(3) .filter-btn').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor=''; });
-  btn.classList.add('active');
-  renderGrid();
+  btn.classList.add('active'); renderGrid();
 }
-
 function setSearch(val) { filterSearch = val.toLowerCase(); renderGrid(); }
-
 function filteredProjects() {
   return projects.filter(p => {
     if (currentRole === 'client' && p.id !== currentClientProject) return false;
@@ -344,48 +448,70 @@ function filteredProjects() {
   });
 }
 
-// ── Render ─────────────────────────────────────────────────────────────────
+// ── PROJECT RENDER ─────────────────────────────────────────────────────────
 function renderGrid() {
   const grid = document.getElementById('grid');
   const fps = filteredProjects();
-  if (fps.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-state-title">No projects found</div><p style="font-size:13px;color:var(--ink-light)">Try adjusting your filters or add a new project.</p></div>`;
-    return;
-  }
-  grid.innerHTML = fps.map(p => cardHTML(p)).join('');
-}
-
-function cardHTML(p) {
-  const dels = DELIVERABLES.map(d => {
-    const info = p.deliverables[d] || { status: 'empty' };
-    return `<div class="del-item"><div class="del-dot ${info.status}"></div><span>${d}</span></div>`;
+  if (!fps.length) { grid.innerHTML = `<div class="empty-state"><div class="empty-state-title">No projects found</div><p style="font-size:13px;color:var(--ink-light)">Try adjusting filters or add a project.</p></div>`; return; }
+  grid.innerHTML = fps.map(p => {
+    const dels = DELIVERABLES.map(d => { const info = p.deliverables[d]||{status:'empty'}; return `<div class="del-item"><div class="del-dot ${info.status}"></div><span>${d}</span></div>`; }).join('');
+    const ac = DELIVERABLES.filter(d => p.deliverables[d]&&p.deliverables[d].status==='approved').length;
+    const wc = DELIVERABLES.filter(d => p.deliverables[d]&&p.deliverables[d].status==='working').length;
+    return `<div class="card" onclick="openProject('${p.id}')">
+      <div class="card-top"><div><div class="card-category">${p.category} · ${p.location}</div><div class="card-name">${p.name}</div><div class="card-client">${p.client}</div></div>
+      <span class="stage-badge ${STAGE_CLASS[p.stage]||''}">${p.stage}</span></div>
+      <div class="deliverables">${dels}</div>
+      <div class="card-footer"><div class="card-date">${ac} approved · ${wc} in progress</div>
+      ${p.approved?`<div class="approved-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>All approved</div>`:''}</div>
+    </div>`;
   }).join('');
-  const approvedCount = DELIVERABLES.filter(d => p.deliverables[d] && p.deliverables[d].status === 'approved').length;
-  const workingCount  = DELIVERABLES.filter(d => p.deliverables[d] && p.deliverables[d].status === 'working').length;
-  return `<div class="card" onclick="openProject('${p.id}')">
-    <div class="card-top">
-      <div>
-        <div class="card-category">${p.category} · ${p.location}</div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-client">${p.client}</div>
-      </div>
-      <span class="stage-badge ${STAGE_CLASS[p.stage] || ''}">${p.stage}</span>
-    </div>
-    <div class="deliverables">${dels}</div>
-    <div class="card-footer">
-      <div class="card-date">${approvedCount} approved · ${workingCount} in progress</div>
-      ${p.approved ? `<div class="approved-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>All approved</div>` : ''}
-    </div>
-  </div>`;
 }
 
-// ── Project modal ──────────────────────────────────────────────────────────
+// ── KB RENDER ──────────────────────────────────────────────────────────────
+function renderKb() {
+  KB_CATEGORIES.forEach(cat => {
+    const el = document.getElementById('kb-' + cat);
+    if (!el) return;
+    const docs = kbDocs.filter(d => d.category === cat);
+    const canEdit = currentRole === 'partner';
+    el.innerHTML = docs.map(d => `
+      <div class="kb-card">
+        <span class="kb-card-tag tag-${cat}">${cat.charAt(0).toUpperCase()+cat.slice(1)}</span>
+        <div class="kb-card-title">${d.title}</div>
+        <div class="kb-card-desc">${d.description||''}</div>
+        ${d.url ? `<a href="${d.url}" target="_blank" class="kb-card-link">Open document ↗</a>` : '<span style="font-size:12px;color:var(--ink-light);font-style:italic">No link added yet</span>'}
+        ${canEdit ? `<div style="display:flex;gap:8px;margin-top:4px"><button onclick="editKbDoc('${d.id}')" style="font-size:11px;color:var(--ink-light);background:none;border:none;cursor:pointer;padding:0">Edit</button><button onclick="deleteDoc('${d.id}','kb')" style="font-size:11px;color:#c44;background:none;border:none;cursor:pointer;padding:0">Delete</button></div>` : ''}
+      </div>`).join('') || `<div class="kb-empty">No documents yet${canEdit?' — click + Add document to add one':''}</div>`;
+  });
+}
+
+// ── VAULT RENDER ───────────────────────────────────────────────────────────
+function renderVault() {
+  VAULT_CATEGORIES.forEach(cat => {
+    const el = document.getElementById('vault-' + cat);
+    if (!el) return;
+    const docs = vaultDocs.filter(d => d.category === cat);
+    el.innerHTML = docs.map(d => `
+      <div class="vault-card">
+        <span class="vault-tag tag-${cat}">${cat.charAt(0).toUpperCase()+cat.slice(1)}</span>
+        <div class="vault-card-title">${d.title}</div>
+        <div class="vault-card-desc">${d.description||''}</div>
+        ${d.url ? `<a href="${d.url}" target="_blank" class="vault-card-link">Open document ↗</a>` : '<span style="font-size:12px;color:var(--ink-light);font-style:italic">No link added yet</span>'}
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button onclick="editVaultDoc('${d.id}')" style="font-size:11px;color:var(--ink-light);background:none;border:none;cursor:pointer;padding:0">Edit</button>
+          <button onclick="deleteDoc('${d.id}','vault')" style="font-size:11px;color:#c44;background:none;border:none;cursor:pointer;padding:0">Delete</button>
+        </div>
+      </div>`).join('') || `<div class="kb-empty">No documents yet — click + Add document to add one</div>`;
+  });
+}
+
+// ── PROJECT MODAL ──────────────────────────────────────────────────────────
 function openProject(id) {
-  const p = projects.find(x => x.id === id);
-  if (!p) return;
+  const p = projects.find(x => x.id === id); if (!p) return;
   editingId = id;
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-subtitle').textContent = `${p.client} · ${p.category} · ${p.area}`;
+  document.getElementById('modal-header').className = 'modal-header';
   const isTeam = currentRole === 'team' || currentRole === 'partner';
   document.getElementById('modal-body').innerHTML = isTeam ? teamModalBody(p) : clientModalBody(p);
   document.getElementById('modal').classList.add('open');
@@ -393,10 +519,8 @@ function openProject(id) {
 
 function clientModalBody(p) {
   const rows = DELIVERABLES.map(d => {
-    const info = p.deliverables[d] || { status: 'empty', approvedUrl: '' };
-    if (info.status !== 'approved' || !info.approvedUrl) {
-      return `<div class="del-row"><div class="del-name">${d}</div><span class="no-file">Not yet approved</span><span></span></div>`;
-    }
+    const info = p.deliverables[d]||{status:'empty',approvedUrl:''};
+    if (info.status !== 'approved' || !info.approvedUrl) return `<div class="del-row"><div class="del-name">${d}</div><span class="no-file">Not yet approved</span><span></span></div>`;
     return `<div class="del-row"><div class="del-name">${d}</div><a href="${info.approvedUrl}" target="_blank" class="del-view-link">View file ↗</a><div class="del-dot approved" style="width:8px;height:8px"></div></div>`;
   }).join('');
   return `<div class="modal-section"><div class="modal-section-title">Approved deliverables</div>${rows}</div>
@@ -413,9 +537,8 @@ function teamModalBody(p) {
   const stageOpts = STAGES.map(s => `<option value="${s}" ${p.stage===s?'selected':''}>${s}</option>`).join('');
   const catOpts = ['Residential','Commercial','Hospitality','Office','Other'].map(c => `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('');
   const delRows = DELIVERABLES.map(d => {
-    const info = p.deliverables[d] || { status: 'empty', url: '', approvedUrl: '' };
-    return `<div class="del-row">
-      <div class="del-name">${d}</div>
+    const info = p.deliverables[d]||{status:'empty',url:'',approvedUrl:''};
+    return `<div class="del-row"><div class="del-name">${d}</div>
       <div style="display:flex;flex-direction:column;gap:6px">
         <input class="del-url-input" placeholder="Working Drive link" value="${info.url||''}" data-del="${d}" data-type="url">
         <input class="del-url-input" placeholder="Approved final Drive link" value="${info.approvedUrl||''}" data-del="${d}" data-type="approvedUrl" style="border-color:${info.approvedUrl?'var(--green)':''}">
@@ -424,32 +547,22 @@ function teamModalBody(p) {
         <option value="empty" ${info.status==='empty'?'selected':''}>Empty</option>
         <option value="working" ${info.status==='working'?'selected':''}>In progress</option>
         <option value="approved" ${info.status==='approved'?'selected':''}>Approved</option>
-      </select>
-    </div>`;
+      </select></div>`;
   }).join('');
   return `<div class="modal-section"><div class="modal-section-title">Project details</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Project name</label><input class="form-input" id="f-name" value="${p.name}"></div>
-      <div class="form-group"><label class="form-label">Client name</label><input class="form-input" id="f-client" value="${p.client}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-cat">${catOpts}</select></div>
-      <div class="form-group"><label class="form-label">Stage</label><select class="form-select" id="f-stage">${stageOpts}</select></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-loc" value="${p.location}"></div>
-      <div class="form-group"><label class="form-label">Area</label><input class="form-input" id="f-area" value="${p.area}"></div>
-    </div>
-  </div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Project name</label><input class="form-input" id="f-name" value="${p.name}"></div>
+    <div class="form-group"><label class="form-label">Client name</label><input class="form-input" id="f-client" value="${p.client}"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-cat">${catOpts}</select></div>
+    <div class="form-group"><label class="form-label">Stage</label><select class="form-select" id="f-stage">${stageOpts}</select></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-loc" value="${p.location}"></div>
+    <div class="form-group"><label class="form-label">Area</label><input class="form-input" id="f-area" value="${p.area}"></div></div></div>
   <div class="modal-section"><div class="modal-section-title">Deliverables — paste Google Drive share links</div>
-    <div style="font-size:11px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Top link = working file &nbsp;·&nbsp; Bottom link = client-approved final &nbsp;·&nbsp; Set status accordingly</div>
-    ${delRows}
-  </div>
+    <div style="font-size:11px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Top link = working file · Bottom link = client-approved final · Set status accordingly</div>
+    ${delRows}</div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
     <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
       <input type="checkbox" id="f-approved" ${p.approved?'checked':''}> All deliverables approved by client
-    </label>
-  </div>
+    </label></div>
   <div style="margin-top:20px;display:flex;gap:0;align-items:center">
     <button class="delete-btn" onclick="deleteProject('${p.id}')">Delete project</button>
     <button class="modal-cancel-btn" onclick="closeModal()">Cancel</button>
@@ -458,56 +571,103 @@ function teamModalBody(p) {
 }
 
 function openAddModal() {
-  const newP = {
-    id: 'PRJ' + Date.now(),
-    name: '', client: '', category: 'Residential', stage: 'Schematic Design',
-    location: '', area: '', startDate: new Date().toISOString().slice(0,7),
-    approved: false, deliverables: {}
-  };
-  DELIVERABLES.forEach(d => { newP.deliverables[d] = { status: 'empty', url: '', approvedUrl: '' }; });
-  projects.push(newP);
-  editingId = newP.id;
+  const newP = { id:'PRJ'+Date.now(), name:'', client:'', category:'Residential', stage:'Schematic Design', location:'', area:'', startDate:new Date().toISOString().slice(0,7), approved:false, deliverables:{} };
+  DELIVERABLES.forEach(d => { newP.deliverables[d]={status:'empty',url:'',approvedUrl:''}; });
+  projects.push(newP); editingId = newP.id;
   openProject(newP.id);
   document.getElementById('modal-title').textContent = 'New project';
   document.getElementById('modal-subtitle').textContent = 'Fill in details and save';
 }
 
 function saveProject() {
-  const p = projects.find(x => x.id === editingId);
-  if (!p) return;
-  p.name     = document.getElementById('f-name').value;
-  p.client   = document.getElementById('f-client').value;
-  p.category = document.getElementById('f-cat').value;
-  p.stage    = document.getElementById('f-stage').value;
-  p.location = document.getElementById('f-loc').value;
-  p.area     = document.getElementById('f-area').value;
-  p.approved = document.getElementById('f-approved').checked;
+  const p = projects.find(x => x.id === editingId); if (!p) return;
+  p.name=document.getElementById('f-name').value; p.client=document.getElementById('f-client').value;
+  p.category=document.getElementById('f-cat').value; p.stage=document.getElementById('f-stage').value;
+  p.location=document.getElementById('f-loc').value; p.area=document.getElementById('f-area').value;
+  p.approved=document.getElementById('f-approved').checked;
   document.querySelectorAll('[data-del]').forEach(el => {
-    const d = el.dataset.del, type = el.dataset.type;
-    if (!p.deliverables[d]) p.deliverables[d] = { status: 'empty', url: '', approvedUrl: '' };
-    p.deliverables[d][type] = el.value;
+    const d=el.dataset.del, type=el.dataset.type;
+    if (!p.deliverables[d]) p.deliverables[d]={status:'empty',url:'',approvedUrl:''};
+    p.deliverables[d][type]=el.value;
   });
-  closeModal();
-  renderGrid();
-  scheduleSave();
+  closeModal(); renderGrid(); scheduleSave();
 }
 
 function deleteProject(id) {
   if (!confirm('Delete this project? This cannot be undone.')) return;
   projects = projects.filter(p => p.id !== id);
-  closeModal();
-  renderGrid();
-  scheduleSave();
+  closeModal(); renderGrid(); scheduleSave();
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  editingId = null;
+function closeModal() { document.getElementById('modal').classList.remove('open'); editingId = null; }
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target===this) closeModal(); });
+
+// ── KB / VAULT DOC MODAL ───────────────────────────────────────────────────
+function openKbModal(doc) {
+  editingDocType = 'kb';
+  editingDocId = doc ? doc.id : null;
+  document.getElementById('doc-modal-header').className = 'modal-header';
+  document.getElementById('doc-modal-title').textContent = doc ? 'Edit document' : 'Add guideline document';
+  document.getElementById('doc-modal-body').innerHTML = docModalBody(doc, KB_CATEGORIES, ['design','technical','material','template'], ['Design standards','Technical standards','Materials & vendors','Templates']);
+  document.getElementById('doc-modal').classList.add('open');
 }
 
-document.getElementById('modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+function openVaultModal(doc) {
+  editingDocType = 'vault';
+  editingDocId = doc ? doc.id : null;
+  document.getElementById('doc-modal-header').className = 'modal-header vault-header';
+  document.getElementById('doc-modal-title').textContent = doc ? 'Edit document' : 'Add private document';
+  document.getElementById('doc-modal-body').innerHTML = docModalBody(doc, VAULT_CATEGORIES, ['hr','finance','legal'], ['HR','Finance & quotations','Legal & contracts']);
+  document.getElementById('doc-modal').classList.add('open');
+}
+
+function editKbDoc(id) { openKbModal(kbDocs.find(d => d.id===id)); }
+function editVaultDoc(id) { openVaultModal(vaultDocs.find(d => d.id===id)); }
+
+function docModalBody(doc, cats, vals, labels) {
+  const catOpts = vals.map((v,i) => `<option value="${v}" ${doc&&doc.category===v?'selected':''}>${labels[i]}</option>`).join('');
+  const isVault = editingDocType === 'vault';
+  return `<div class="modal-section"><div class="modal-section-title">Document details</div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Title</label><input class="form-input" id="d-title" value="${doc?doc.title:''}"></div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Category</label><select class="form-select" id="d-cat">${catOpts}</select></div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Short description</label><textarea class="form-textarea" id="d-desc">${doc?doc.description:''}</textarea></div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Google Drive link</label><input class="form-input" id="d-url" placeholder="Paste Drive share link here" value="${doc?doc.url:''}"></div>
+  </div>
+  <div style="display:flex;gap:0;align-items:center">
+    ${doc?`<button class="delete-btn" onclick="deleteDoc('${doc.id}','${editingDocType}')">Delete</button>`:''}
+    <button class="modal-cancel-btn" onclick="closeDocModal()">Cancel</button>
+    <button class="modal-save-btn ${isVault?'red':''}" onclick="saveDoc()">Save document</button>
+  </div>`;
+}
+
+function saveDoc() {
+  const title = document.getElementById('d-title').value.trim();
+  if (!title) return alert('Please enter a title');
+  const doc = {
+    id: editingDocId || 'DOC'+Date.now(),
+    title, category: document.getElementById('d-cat').value,
+    description: document.getElementById('d-desc').value,
+    url: document.getElementById('d-url').value.trim()
+  };
+  if (editingDocType === 'kb') {
+    if (editingDocId) { const i = kbDocs.findIndex(d=>d.id===editingDocId); kbDocs[i]=doc; } else kbDocs.push(doc);
+    renderKb();
+  } else {
+    if (editingDocId) { const i = vaultDocs.findIndex(d=>d.id===editingDocId); vaultDocs[i]=doc; } else vaultDocs.push(doc);
+    renderVault();
+  }
+  closeDocModal(); scheduleSave();
+}
+
+function deleteDoc(id, type) {
+  if (!confirm('Delete this document?')) return;
+  if (type === 'kb') { kbDocs = kbDocs.filter(d=>d.id!==id); renderKb(); }
+  else { vaultDocs = vaultDocs.filter(d=>d.id!==id); renderVault(); }
+  closeDocModal(); scheduleSave();
+}
+
+function closeDocModal() { document.getElementById('doc-modal').classList.remove('open'); editingDocId=null; editingDocType=null; }
+document.getElementById('doc-modal').addEventListener('click', function(e) { if (e.target===this) closeDocModal(); });
 </script>
 </body>
 </html>
