@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0044)file:///C:/Users/User/Downloads/index_3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Design Shop</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
   :root {
     --cream: #F7F4EF; --parchment: #EDE8DF; --ink: #1C1917; --ink-mid: #4A4540; --ink-light: #8A8078;
@@ -181,7 +181,7 @@
     <div class="auth-logo">The Design Shop</div>
     <div class="auth-tagline">designing + building thoughtful spaces</div>
     <label class="auth-label">Access code</label>
-    <input class="auth-input" type="password" id="auth-input" placeholder="Enter your code" onkeydown="if(event.key==='Enter')doLogin()">
+    <input class="auth-input" type="password" id="auth-input" placeholder="Enter your code" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
     <button class="auth-btn" onclick="doLogin()">Enter</button>
     <div class="auth-error" id="auth-error">Incorrect code. Please try again.</div>
   </div>
@@ -199,34 +199,34 @@
   </header>
 
   <div class="client-notice" id="client-notice" style="display:none">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.5" stroke-width="2"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16.5" stroke-width="2"></line></svg>
     You are viewing approved project files only. Contact your designer for questions.
   </div>
 
   <!-- NAV TABS -->
   <div class="nav-tabs" id="nav-tabs">
-    <div class="nav-tab active" onclick="switchTab('projects')" id="tab-projects">Projects</div>
-    <div class="nav-tab" onclick="switchTab('knowledge')" id="tab-knowledge">Team Guidelines</div>
-    <div class="nav-tab partner-only" onclick="switchTab('vault')" id="tab-vault" style="display:none">🔒 Private Vault</div>
+    <div class="nav-tab active" onclick="switchTab(&#39;projects&#39;)" id="tab-projects">Projects</div>
+    <div class="nav-tab" onclick="switchTab(&#39;knowledge&#39;)" id="tab-knowledge">Team Guidelines</div>
+    <div class="nav-tab partner-only" onclick="switchTab(&#39;vault&#39;)" id="tab-vault" style="display:none">🔒 Private Vault</div>
   </div>
 
   <!-- PROJECTS TAB -->
   <div class="section active" id="section-projects">
     <div class="toolbar">
       <div class="toolbar-section">
-        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-        <button class="filter-btn" onclick="setFilter('Residential',this)">Residential</button>
-        <button class="filter-btn" onclick="setFilter('Commercial',this)">Commercial</button>
-        <button class="filter-btn" onclick="setFilter('Hospitality',this)">Hospitality</button>
-        <button class="filter-btn" onclick="setFilter('Office',this)">Office</button>
+        <button class="filter-btn active" onclick="setFilter(&#39;all&#39;,this)">All</button>
+        <button class="filter-btn" onclick="setFilter(&#39;Residential&#39;,this)">Residential</button>
+        <button class="filter-btn" onclick="setFilter(&#39;Commercial&#39;,this)">Commercial</button>
+        <button class="filter-btn" onclick="setFilter(&#39;Hospitality&#39;,this)">Hospitality</button>
+        <button class="filter-btn" onclick="setFilter(&#39;Office&#39;,this)">Office</button>
       </div>
       <div class="toolbar-sep"></div>
       <div class="toolbar-section">
-        <button class="filter-btn active" onclick="setStageFilter('all-s',this)">All stages</button>
-        <button class="filter-btn" onclick="setStageFilter('Schematic Design',this)">Schematic</button>
-        <button class="filter-btn" onclick="setStageFilter('Design Development',this)">DD</button>
-        <button class="filter-btn" onclick="setStageFilter('Execution',this)">Execution</button>
-        <button class="filter-btn" onclick="setStageFilter('Completed',this)">Completed</button>
+        <button class="filter-btn active" onclick="setStageFilter(&#39;all-s&#39;,this)">All stages</button>
+        <button class="filter-btn" onclick="setStageFilter(&#39;Schematic Design&#39;,this)">Schematic</button>
+        <button class="filter-btn" onclick="setStageFilter(&#39;Design Development&#39;,this)">DD</button>
+        <button class="filter-btn" onclick="setStageFilter(&#39;Execution&#39;,this)">Execution</button>
+        <button class="filter-btn" onclick="setStageFilter(&#39;Completed&#39;,this)">Completed</button>
       </div>
       <input class="search-input" type="text" placeholder="Search projects…" oninput="setSearch(this.value)">
       <button class="add-btn" id="add-btn" onclick="openAddModal()" style="display:none">+ Add project</button>
@@ -239,7 +239,7 @@
     <main>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
         <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)">Team Guidelines</div>
+          <div style="font-family:&#39;Cormorant Garamond&#39;,serif;font-size:28px;font-weight:300;color:var(--ink)">Team Guidelines</div>
           <div style="font-size:12px;color:var(--ink-light);margin-top:4px">Read-only reference for all team members</div>
         </div>
         <button class="add-btn" id="kb-add-btn" onclick="openKbModal()" style="display:none">+ Add document</button>
@@ -256,7 +256,7 @@
         <div class="kb-grid" id="kb-technical"></div>
       </div>
       <div class="kb-section">
-        <div class="kb-section-title">Materials & vendors</div>
+        <div class="kb-section-title">Materials &amp; vendors</div>
         <div class="kb-section-sub">Preferred materials, vendor contacts, spec formats</div>
         <div class="kb-grid" id="kb-material"></div>
       </div>
@@ -272,12 +272,12 @@
   <div class="section" id="section-vault">
     <main>
       <div class="vault-notice">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         Private — visible only to partners. Team members cannot see this section.
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
         <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)">Private Vault</div>
+          <div style="font-family:&#39;Cormorant Garamond&#39;,serif;font-size:28px;font-weight:300;color:var(--ink)">Private Vault</div>
           <div style="font-size:12px;color:var(--ink-light);margin-top:4px">Confidential documents — HR, finance, legal</div>
         </div>
         <button class="add-btn" style="background:var(--red)" onclick="openVaultModal()">+ Add document</button>
@@ -288,11 +288,11 @@
         <div class="vault-grid" id="vault-hr"></div>
       </div>
       <div class="kb-section">
-        <div class="kb-section-title">Finance & quotations</div>
+        <div class="kb-section-title">Finance &amp; quotations</div>
         <div class="vault-grid" id="vault-finance"></div>
       </div>
       <div class="kb-section">
-        <div class="kb-section-title">Legal & contracts</div>
+        <div class="kb-section-title">Legal &amp; contracts</div>
         <div class="vault-grid" id="vault-legal"></div>
       </div>
     </main>
@@ -340,7 +340,7 @@ let currentRole = null, currentClientProject = null;
 let filterCat = 'all', filterStage = 'all-s', filterSearch = '';
 let editingId = null, editingDocId = null, editingDocType = null;
 let projects = [], kbDocs = [], vaultDocs = [];
-let binId = localStorage.getItem('tds_bin_id') || '';
+let binId = localStorage.getItem('tds_bin_id') || '6a27a2e4da38895dfe9e20a9';
 let saveTimer = null;
 
 // ── DB ─────────────────────────────────────────────────────────────────────
@@ -681,5 +681,6 @@ function deleteDoc(id, type) {
 function closeDocModal() { document.getElementById('doc-modal').classList.remove('open'); editingDocId=null; editingDocType=null; }
 document.getElementById('doc-modal').addEventListener('click', function(e) { if (e.target===this) closeDocModal(); });
 </script>
-</body>
-</html>
+
+
+</body></html>
