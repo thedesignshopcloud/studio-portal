@@ -143,6 +143,23 @@
   .del-row:last-child { border-bottom: none; }
   .del-name { font-size: 13px; font-weight: 500; color: var(--ink); }
   .del-url-input { border: 0.5px solid var(--border-strong); padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); background: white; outline: none; width: 100%; }
+  /* ── Archive ── */
+  .arch-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .arch-tab { font-size: 11px; letter-spacing: 0.04em; padding: 5px 12px; border: 0.5px solid var(--border-strong); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--ink-mid); transition: all 0.15s; }
+  .arch-tab:hover, .arch-tab.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .arch-tab .arch-count { opacity: 0.55; margin-left: 4px; font-size: 10px; }
+  .arch-entry { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .arch-entry:last-child { border-bottom: none; }
+  .arch-entry-label { font-size: 13px; color: var(--ink); }
+  .arch-entry-meta { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+  .arch-entry-actions { display: flex; gap: 12px; align-items: center; flex-shrink: 0; padding-top: 2px; }
+  .arch-open { color: var(--blue); font-size: 12px; text-decoration: none; white-space: nowrap; }
+  .arch-open:hover { text-decoration: underline; }
+  .arch-del { font-size: 11px; color: #c44; background: none; border: none; cursor: pointer; padding: 0; }
+  .arch-add { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; margin-top: 12px; align-items: start; }
+  .arch-add-btn { font-size: 12px; padding: 7px 16px; border: none; background: var(--ink); color: var(--cream); cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+  .arch-add-btn:hover { opacity: 0.85; }
+  .arch-empty { font-size: 12px; color: var(--ink-light); font-style: italic; padding: 10px 0; }
   .del-url-input:focus { border-color: var(--ink); }
   .del-status-select { border: 0.5px solid var(--border-strong); padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; background: white; outline: none; cursor: pointer; color: var(--ink); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
@@ -335,10 +352,19 @@ const STAGES = ['Schematic Design','Design Development','Tender','Execution','Ha
 const STAGE_CLASS = { 'Schematic Design':'stage-schematic','Design Development':'stage-dd','Tender':'stage-tender','Execution':'stage-execution','Handover':'stage-handover','Completed':'stage-completed' };
 const KB_CATEGORIES = ['design','technical','material','template'];
 const VAULT_CATEGORIES = ['hr','finance','legal'];
+const ARCHIVE_TABS = [
+  { key:'design',       label:'Design files' },
+  { key:'detail',       label:'Detail drawings' },
+  { key:'layout',       label:'Layouts & plans' },
+  { key:'render',       label:'3D & renders' },
+  { key:'presentation', label:'Moodboards & decks' },
+  { key:'misc',         label:'Miscellaneous' },
+];
 
 let currentRole = null, currentClientProject = null;
 let filterCat = 'all', filterStage = 'all-s', filterSearch = '';
 let editingId = null, editingDocId = null, editingDocType = null;
+let currentArchiveTab = 'design';
 let projects = [], kbDocs = [], vaultDocs = [];
 let binId = localStorage.getItem('tds_bin_id') || '6a27a2e4da38895dfe9e20a9';
 let saveTimer = null;
@@ -469,11 +495,12 @@ function renderGrid() {
     const dels = DELIVERABLES.map(d => { const info = p.deliverables[d]||{status:'empty'}; return `<div class="del-item"><div class="del-dot ${info.status}"></div><span>${d}</span></div>`; }).join('');
     const ac = DELIVERABLES.filter(d => p.deliverables[d]&&p.deliverables[d].status==='approved').length;
     const wc = DELIVERABLES.filter(d => p.deliverables[d]&&p.deliverables[d].status==='working').length;
+    const arcCount = p.archive ? Object.values(p.archive).reduce((n,arr)=>n+(arr?arr.length:0),0) : 0;
     return `<div class="card" onclick="openProject('${p.id}')">
       <div class="card-top"><div><div class="card-category">${p.category} · ${p.location}</div><div class="card-name">${p.name}</div><div class="card-client">${p.client}</div></div>
       <span class="stage-badge ${STAGE_CLASS[p.stage]||''}">${p.stage}</span></div>
       <div class="deliverables">${dels}</div>
-      <div class="card-footer"><div class="card-date">${ac} approved · ${wc} in progress</div>
+      <div class="card-footer"><div class="card-date">${ac} approved · ${wc} in progress${arcCount?` · ${arcCount} archived`:''}</div>
       ${p.approved?`<div class="approved-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>All approved</div>`:''}</div>
     </div>`;
   }).join('');
@@ -521,6 +548,7 @@ function renderVault() {
 function openProject(id) {
   const p = projects.find(x => x.id === id); if (!p) return;
   editingId = id;
+  currentArchiveTab = 'design';
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-subtitle').textContent = `${p.client} · ${p.category} · ${p.area}`;
   document.getElementById('modal-header').className = 'modal-header';
@@ -571,6 +599,7 @@ function teamModalBody(p) {
   <div class="modal-section"><div class="modal-section-title">Deliverables — paste Google Drive share links</div>
     <div style="font-size:11px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Top link = working file · Bottom link = client-approved final · Set status accordingly</div>
     ${delRows}</div>
+  <div class="modal-section" id="archive-section">${archiveSectionBody(p)}</div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
     <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
       <input type="checkbox" id="f-approved" ${p.approved?'checked':''}> All deliverables approved by client
@@ -582,9 +611,77 @@ function teamModalBody(p) {
   </div>`;
 }
 
+// ── ARCHIVE ────────────────────────────────────────────────────────────────
+function ensureArchive(p) {
+  if (!p.archive) p.archive = {};
+  ARCHIVE_TABS.forEach(t => { if (!p.archive[t.key]) p.archive[t.key] = []; });
+  return p.archive;
+}
+
+function archiveSectionBody(p) {
+  const arch = ensureArchive(p);
+  const tabs = ARCHIVE_TABS.map(t => {
+    const n = arch[t.key].length;
+    return `<button class="arch-tab ${currentArchiveTab===t.key?'active':''}" onclick="switchArchiveTab('${t.key}')">${t.label}${n?`<span class="arch-count">${n}</span>`:''}</button>`;
+  }).join('');
+  const entries = arch[currentArchiveTab];
+  const list = entries.length ? [...entries].reverse().map(e => `
+    <div class="arch-entry">
+      <div>
+        <div class="arch-entry-label">${e.label}</div>
+        <div class="arch-entry-meta">${e.date}${e.note ? ' · ' + e.note : ''}</div>
+      </div>
+      <div class="arch-entry-actions">
+        ${e.url ? `<a href="${e.url}" target="_blank" class="arch-open">Open ↗</a>` : ''}
+        <button class="arch-del" onclick="deleteArchiveEntry('${e.id}')">Remove</button>
+      </div>
+    </div>`).join('') : `<div class="arch-empty">No archived versions in this tab yet — add superseded versions below so nothing is lost.</div>`;
+  return `<div class="modal-section-title">Archive — superseded &amp; non-final versions (not visible to clients)</div>
+    <div class="arch-tabs">${tabs}</div>
+    <div>${list}</div>
+    <div class="arch-add">
+      <input class="del-url-input" id="arch-label" placeholder="Version label · e.g. Design file v03">
+      <input class="del-url-input" id="arch-url" placeholder="Drive share link">
+      <button class="arch-add-btn" onclick="addArchiveEntry()">+ Archive</button>
+      <input class="del-url-input" id="arch-note" placeholder="Note (optional) · e.g. before client revision on kitchen" style="grid-column:1 / -1">
+    </div>`;
+}
+
+function refreshArchiveSection() {
+  const p = projects.find(x => x.id === editingId); if (!p) return;
+  const el = document.getElementById('archive-section');
+  if (el) el.innerHTML = archiveSectionBody(p);
+}
+
+function switchArchiveTab(key) { currentArchiveTab = key; refreshArchiveSection(); }
+
+function addArchiveEntry() {
+  const p = projects.find(x => x.id === editingId); if (!p) return;
+  const label = document.getElementById('arch-label').value.trim();
+  const url = document.getElementById('arch-url').value.trim();
+  const note = document.getElementById('arch-note').value.trim();
+  if (!label) return alert('Please add a version label (e.g. "Detail drawings v02")');
+  if (!url) return alert('Please paste the Drive share link');
+  ensureArchive(p)[currentArchiveTab].push({
+    id: 'ARC' + Date.now(),
+    label, url, note,
+    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+  });
+  refreshArchiveSection(); scheduleSave();
+}
+
+function deleteArchiveEntry(id) {
+  const p = projects.find(x => x.id === editingId); if (!p) return;
+  if (!confirm('Remove this archived version from the portal? (The file itself stays in Drive.)')) return;
+  const arch = ensureArchive(p);
+  arch[currentArchiveTab] = arch[currentArchiveTab].filter(e => e.id !== id);
+  refreshArchiveSection(); scheduleSave();
+}
+
 function openAddModal() {
   const newP = { id:'PRJ'+Date.now(), name:'', client:'', category:'Residential', stage:'Schematic Design', location:'', area:'', startDate:new Date().toISOString().slice(0,7), approved:false, deliverables:{} };
   DELIVERABLES.forEach(d => { newP.deliverables[d]={status:'empty',url:'',approvedUrl:''}; });
+  ensureArchive(newP);
   projects.push(newP); editingId = newP.id;
   openProject(newP.id);
   document.getElementById('modal-title').textContent = 'New project';
